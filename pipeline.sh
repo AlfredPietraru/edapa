@@ -23,36 +23,39 @@ eval "$(pyenv init -)"
 pyenv shell 3.10.1
 source my_venv/bin/activate
 
-# if [ ! -d ${SAVE_MODEL_PATH} ]
-# then
-#     mkdir ${SAVE_MODEL_PATH}
-# fi
+if [ ! -d ${SAVE_MODEL_PATH} ]
+then
+    mkdir ${SAVE_MODEL_PATH}
+fi
 
-# yolo detect train \
-# imgsz=${SIZE} \
-# batch=4 \
-# epochs=2 \
-# data=$DATASET_YAML \
-# model=$YAML
+yolo detect train \
+imgsz=${SIZE} \
+batch=4 \
+epochs=2 \
+data=$DATASET_YAML \
+model=$YAML
 
-# mv runs/detect/train/weights/best.pt ./${MODEL}
+mv runs/detect/train/weights/best.pt ./${MODEL}
 
-# yolo export \
-# imgsz=${SIZE} \
-# model=${MODEL} \
-# format=tflite \
-# optimize=True \
-# int8=True
+yolo export \
+imgsz=${SIZE} \
+model=${MODEL} \
+format=tflite \
+optimize=True \
+int8=True
 
-# mv runs/detect/train/results.csv ${SAVE_MODEL_PATH}
-# rm -rf runs
+mv runs/detect/train/results.csv ${SAVE_MODEL_PATH}
 
-# edgetpu_compiler ${SAVE_MODEL_PATH}/${MODEL_NAME}_full_integer_quant.tflite
-# cat ${MODEL_NAME}_full_integer_quant_edgetpu.log
-# mv ${MODEL_NAME}.onnx ${MODEL_NAME}_full_integer_quant_edgetpu.log  ${MODEL_NAME}_full_integer_quant_edgetpu.tflite ${SAVE_MODEL_PATH}
+edgetpu_compiler ${SAVE_MODEL_PATH}/${MODEL_NAME}_full_integer_quant.tflite
+cat ${MODEL_NAME}_full_integer_quant_edgetpu.log
+mv ${MODEL_NAME}.onnx ${MODEL_NAME}_full_integer_quant_edgetpu.log  ${MODEL_NAME}_full_integer_quant_edgetpu.tflite ${SAVE_MODEL_PATH}
 
 yolo detect val \
-imgsz=${SIZE}
-model=${SAVE_MODEL_PATH}/${MODEL_NAME}_full_integer_quant_edgetpu.tflite
+imgsz=${SIZE} \
+model=$SAVE_MODEL_PATH/${MODEL_NAME}_full_integer_quant_edgetpu.tflite \
 source=$DATASET_DETECT \
 data=$DATASET_YAML \
+project=runs/detect \
+name=val_${MODEL_NAME}
+
+rm -rf runs/detect/train

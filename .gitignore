@@ -1,0 +1,11 @@
+dir_*
+new_venv
+runs
+my_venv
+*_saved_model
+calibration_image_sample_data_20*
+*.onnx
+Visdrone
+help.txt
+/yolov5UPDATED.pt
+/yolo11n.pt

@@ -10,6 +10,8 @@ DATASET_DETECT=/home/alf/edapa/other/datasets/VisDrone/VisDrone2019-DET-val/imag
 # DATASET_YAML=/home/alf/edapa/other/datasets/coco8/coco8.yaml
 # DATASET_DETECT=/home/alf/edapa/other/datasets/coco8/images/val
 
+# DATASET_YAML=VisDrone.yaml
+
 # DATASET_YAML=/home/alf/edapa/other/datasets/VisDroneLonely/VisDroneLonely.yaml
 # DATASET_DETECT=/home/alf/edapa/other/datasets/VisDroneLonely/VisDrone2019-DET-val/images
 MODEL_NAME=$(basename $YAML .yaml)

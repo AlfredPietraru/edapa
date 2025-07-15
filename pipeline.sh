@@ -4,11 +4,11 @@
 # CLEAR_ENABLED=$1
 YAML=$1
 SIZE=1024
-# DATASET_YAML=/home/alf/edapa/other/datasets/VisDrone/VisDrone.yaml
-# DATASET_DETECT=/home/alf/edapa/other/datasets/VisDrone/VisDrone2019-DET-val/images
+DATASET_YAML=/home/alf/edapa/other/datasets/VisDrone/VisDrone.yaml
+DATASET_DETECT=/home/alf/edapa/other/datasets/VisDrone/VisDrone2019-DET-val/images
 
-DATASET_YAML=/home/alf/edapa/other/datasets/coco8/coco8.yaml
-DATASET_DETECT=/home/alf/edapa/other/datasets/coco8/images/val
+# DATASET_YAML=/home/alf/edapa/other/datasets/coco8/coco8.yaml
+# DATASET_DETECT=/home/alf/edapa/other/datasets/coco8/images/val
 
 # DATASET_YAML=/home/alf/edapa/other/datasets/VisDroneLonely/VisDroneLonely.yaml
 # DATASET_DETECT=/home/alf/edapa/other/datasets/VisDroneLonely/VisDrone2019-DET-val/images
@@ -30,10 +30,14 @@ fi
 
 yolo detect train \
 imgsz=${SIZE} \
-batch=4 \
-epochs=2 \
+batch=8 \
+epochs=40 \
+save_period=3 \
 data=$DATASET_YAML \
-model=$YAML
+model=${MODEL} \
+resume=True
+
+#model=$YAML
 
 mv runs/detect/train/weights/best.pt ./${MODEL}
 
@@ -58,4 +62,4 @@ data=$DATASET_YAML \
 project=runs/detect \
 name=val_${MODEL_NAME}
 
-rm -rf runs/detect/train
+# rm -rf runs/detect/train

@@ -2,7 +2,7 @@
 from ultralytics import YOLO
 import argparse
 import os
-import torch
+import re
 from torch.utils.tensorboard import SummaryWriter
 writer = SummaryWriter()
 
@@ -51,13 +51,32 @@ if model == None:
     print("NU S-A PUTUT INITIALIZA MODELUL")
     exit(1)
 
-print("SE INCEPE ACUM ANTRENAREA")
-model.train(
-    data=data_yaml,
-    epochs=20,
-    imgsz=1024,
-    batch=8,
-    model=model,
-    resume=False
-)
 
+
+
+print("SE INCEPE ACUM ANTRENAREA")
+# model.train(
+#     data=data_yaml,
+#     epochs=20,
+#     imgsz=1024,
+#     batch=8,
+#     model=model,
+#     resume=False
+# )
+
+print("SE MUTA ACUM CEL MAI BUN MODEL ANTRENAT")
+path ="runs/detect"
+pattern = r'^train\d*$'
+files_folders = os.listdir(path)
+if (len(files_folders) == 0):
+    print("NU EXISTA REZULTATE DE ANTRENARE") 
+    exit(1)
+
+train_sessions = [dir for dir in files_folders if re.match(pattern, dir) and (os.path.isdir(path + "/" + dir))]
+train_sessions.sort()
+best_parameters_model = path + "/" + train_sessions[-1] + "/weights/best.pt"
+if os.path.isfile(best_parameters_model):
+    print("MODELUL A FOST GASIT SI VA FI MUTAT")
+    os.rename(best_parameters_model, "./best.pt")
+else:
+    print("MODELUL NU A FOST GASIT")
